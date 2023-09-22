@@ -42,33 +42,53 @@ const newArr = [
         return {tasks: newArr}
     })
 }
-
+toggleProperty(arr, id, propName){
+    const idx = arr.findIndex((el) => el.id === id)
+    const oldTask = arr[idx]
+    const newTask = {...oldTask, [propName]: !oldTask[propName]}
+    return [...arr.slice(0, idx), newTask, ...arr.slice(idx + 1)]
+}
 onToggleDone = (id) => {
     this.setState(({tasks}) => {
-        const idx = tasks.findIndex((el) => el.id === id)
-        const oldTask = tasks[idx]
-        const newTask = {...oldTask, completed: !oldTask.completed}
-        const newArray = [...tasks.slice(0, idx), newTask, ...tasks.slice(idx + 1)]
-        console.log (newTask);
         return {
-            tasks: newArray
+            tasks: this.toggleProperty(tasks, id, 'completed')
         }
-
     })
 }
+     onClickAll = () => {
+        console.log('All')
+    }
+    clearCompleted = () => {
+    const newTasks = this.state.tasks.filter((task) => !task.completed)
+        this.setState(({tasks}) => {
+            return {tasks: newTasks}
+        })
+    }
+    filterActive = () => {
+    console.log('Active')
+    }
+    filterCompleted = () => {
+    console.log('Completed')
+    }
     render() {
         const { tasks} = this.state
+        const todoCount = tasks.filter((el) => !el.completed).length
         return (
             <section className="todoapp">
                 <header className="header">
                     <h1>todos</h1>
-                    <NewTaskForm />
+                    <NewTaskForm
+                    onItemAdded={this.addTask}/>
                 </header>
                 <section className="main">
                     <TaskList todos={tasks}
                               onDeleted={this.deleteItem}
                               onToggleDone={this.onToggleDone}/>
-                    <Footer />
+                    <Footer toDo={todoCount}
+                            filterAll={this.onClickAll}
+                            filterActive={this.filterActive}
+                            filterCompleted={this.filterCompleted}
+                            clearCompleted={this.clearCompleted}/>
                 </section>
             </section>
         )
