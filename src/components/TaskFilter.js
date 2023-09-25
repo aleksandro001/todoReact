@@ -1,26 +1,27 @@
 import React, {Component}  from "react";
+import {fi} from "date-fns/locale";
 
 export default class TasksFilter extends Component {
+    render(){
+const {onFilterChange, filterValue} = this.props
 
-
-    render() {
-        const {onFilterChange, filterValue} = this.props
-
-        const active = () => {
-            onFilterChange('ACTIVE')
-        }
         return (<ul className="filters">
             <li>
-                <button className="selected"
+                <button
+                    className={ filterValue === 'ALL' ? 'selected': ''}
+                    onClick={() => onFilterChange('ALL')}
                 >All</button>
             </li>
             <li>
                 <button
-                    onClick={active}
+                    className={ filterValue === 'ACTIVE' ? 'selected': ''}
+                    onClick={() => onFilterChange('ACTIVE')}
                 >Active</button>
             </li>
             <li>
                 <button
+                    className={ filterValue === 'COMPLETED' ? 'selected': ''}
+                    onClick={() => onFilterChange('COMPLETED')}
                 >Completed</button>
             </li>
         </ul>)

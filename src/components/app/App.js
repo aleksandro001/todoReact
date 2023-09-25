@@ -10,10 +10,6 @@ import {ru} from "date-fns/locale";
 
 export default class App extends Component {
 
-    // constructor() {
-    //     super();
-    //     this.handleFilterValueChange = this.handleFilterValueChange.bind(this)
-    // }
 
     maxId = 100;
     TaskFilterValue = {
@@ -86,8 +82,7 @@ onToggleDone = (id) => {
             return {tasks: newTasks}
         })
     }
-    handleFilterValueChange(filterValue) {
-    console.log('Click Active')// this problem!!!!!
+    handleFilterValueChange = (filterValue) => {
         this.setState(() => {
             return { filterValue: filterValue };
         });
@@ -97,7 +92,6 @@ onToggleDone = (id) => {
         const { tasks, filterValue} = this.state
         const todoCount = tasks.filter((el) => !el.completed).length
 
-        // console.log(filterValue)
         return (
             <section className="todoapp">
                 <header className="header">
