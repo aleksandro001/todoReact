@@ -4,17 +4,41 @@ import { formatDistanceToNow } from 'date-fns';
 import NewTaskForm from "../NewTaskForm";
 import TaskList from "../TaskList";
 import Footer from "../Footer";
+import {ru} from "date-fns/locale";
+
 
 
 export default class App extends Component {
+
+    // constructor() {
+    //     super();
+    //     this.handleFilterValueChange = this.handleFilterValueChange.bind(this)
+    // }
+
     maxId = 100;
+    TaskFilterValue = {
+        ALL: 'ALL',
+        ACTIVE: 'ACTIVE',
+        COMPLETED: 'COMPLETED',
+    };
 state = {
+    filterValue: this.TaskFilterValue.ALL,
     tasks: [
         this.createTask('Completed task'),
         this.createTask('Editing task'),
         this.createTask('Active task'),
-    ]
+    ],
 }
+    getFilteredTasks() {
+        switch (this.state.filterValue) {
+            case this.TaskFilterValue.ACTIVE:
+                return this.state.tasks.filter((task) => !task.completed);
+            case this.TaskFilterValue.COMPLETED:
+                return this.state.tasks.filter((task) => task.completed);
+            default:
+                return this.state.tasks;
+        }
+    }
 
 createTask(task) {
     return {
@@ -55,24 +79,25 @@ onToggleDone = (id) => {
         }
     })
 }
-     onClickAll = () => {
-        console.log('All')
-    }
+
     clearCompleted = () => {
     const newTasks = this.state.tasks.filter((task) => !task.completed)
         this.setState(({tasks}) => {
             return {tasks: newTasks}
         })
     }
-    filterActive = () => {
-    console.log('Active')
+    handleFilterValueChange(filterValue) {
+    console.log('Click Active')// this problem!!!!!
+        this.setState(() => {
+            return { filterValue: filterValue };
+        });
     }
-    filterCompleted = () => {
-    console.log('Completed')
-    }
+
     render() {
-        const { tasks} = this.state
+        const { tasks, filterValue} = this.state
         const todoCount = tasks.filter((el) => !el.completed).length
+
+        // console.log(filterValue)
         return (
             <section className="todoapp">
                 <header className="header">
@@ -81,13 +106,12 @@ onToggleDone = (id) => {
                     onItemAdded={this.addTask}/>
                 </header>
                 <section className="main">
-                    <TaskList todos={tasks}
+                    <TaskList todos={this.getFilteredTasks()}
                               onDeleted={this.deleteItem}
                               onToggleDone={this.onToggleDone}/>
                     <Footer toDo={todoCount}
-                            filterAll={this.onClickAll}
-                            filterActive={this.filterActive}
-                            filterCompleted={this.filterCompleted}
+                            filterValue={filterValue}
+                            onFilterChange={this.handleFilterValueChange}
                             clearCompleted={this.clearCompleted}/>
                 </section>
             </section>
