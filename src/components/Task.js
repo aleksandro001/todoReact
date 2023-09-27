@@ -1,13 +1,22 @@
 import React, {Component} from "react";
 import classNames from "classnames";
+import { formatDistanceToNow } from 'date-fns';
+import PropTypes from "prop-types";
 export default class Task extends Component {
-
+    static defaultProps = {
+        onDeleted: () => {},
+        task: {},
+        completed: false,
+        onToggleDone: () => {},
+        createDate: () => {},
+    }
     render() {
-        const {onDeleted, task, completed,  onToggleDone} = this.props
+        const {onDeleted, task, completed,  onToggleDone, createDate} = this.props
         const itemClasses = classNames({
             completed: completed,
-            // editing: this.state.editForm,
         })
+        const getFormattedDate = formatDistanceToNow(createDate,{addSuffix: true})
+
         return (
             <li className={itemClasses}>
             <div className="view">
@@ -17,7 +26,7 @@ export default class Task extends Component {
                         className="description"
                         onClick={onToggleDone}
                     >{task}</span>
-                    <span className="created">created 5 minutes ago</span>
+                    <span className="created">{ getFormattedDate}</span>
                 </label>
                 <button className="icon icon-edit"></button>
                 <button className="icon icon-destroy"
@@ -26,4 +35,16 @@ export default class Task extends Component {
             </div>
         </li>)
     }
+}
+Task.propTypes = {
+    onDeleted: PropTypes.func,
+    task: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+    ]),
+    completed: PropTypes.bool,
+    onToggleDone: PropTypes.func,
+    createDate: PropTypes.instanceOf(Date),
+
+
 }

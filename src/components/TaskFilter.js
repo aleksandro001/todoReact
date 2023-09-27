@@ -1,7 +1,11 @@
 import React, {Component}  from "react";
-import {fi} from "date-fns/locale";
+import PropTypes from 'prop-types';
 
 export default class TasksFilter extends Component {
+    static defaultProps = {
+        onFilterChange: () => {},
+        filterValue: {},
+    }
     render(){
 const {onFilterChange, filterValue} = this.props
 
@@ -26,5 +30,9 @@ const {onFilterChange, filterValue} = this.props
             </li>
         </ul>)
     }
+}
+TasksFilter.protTypes = {
+    onFilterChange: PropTypes.func,
+    filterValue: PropTypes.string,
 }
 

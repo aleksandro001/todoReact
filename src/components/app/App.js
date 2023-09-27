@@ -1,10 +1,8 @@
 import React, {Component}   from "react";
 import './app.css';
-import { formatDistanceToNow } from 'date-fns';
 import NewTaskForm from "../NewTaskForm";
 import TaskList from "../TaskList";
 import Footer from "../Footer";
-import {ru} from "date-fns/locale";
 
 
 
@@ -41,6 +39,7 @@ createTask(task) {
         task,
         id: this.maxId++,
         completed: false,
+        createDate: new Date(),
     }
 }
 deleteItem = (id) => {

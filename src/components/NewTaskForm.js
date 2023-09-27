@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-
+import PropTypes from 'prop-types';
 export default class NewTaskForm extends Component {
     state = {
         task: ''
@@ -32,4 +32,7 @@ export default class NewTaskForm extends Component {
 
         )
     }
+}
+NewTaskForm.propTypes = {
+    onItemAdded: PropTypes.func,
 }
