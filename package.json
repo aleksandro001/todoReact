@@ -51,9 +51,12 @@
     }
   },
   "lint-staged": {
-    "*.jsx": [
-      "npm run lint:fix",
-      "git add"
+    "*.(js|jsx)": [
+      "npx eslint --fix",
+      "npx prettier --write"
+    ],
+    "*.(css|html|json|md)": [
+      "npx prettier --write"
     ]
   },
   "devDependencies": {
