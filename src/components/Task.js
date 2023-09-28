@@ -10,6 +10,13 @@ export default class Task extends Component {
     onToggleDone: () => {},
     createDate: () => {},
   };
+  static propTypes = {
+    onDeleted: PropTypes.func,
+    task: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    completed: PropTypes.bool,
+    onToggleDone: PropTypes.func,
+    createDate: PropTypes.instanceOf(Date),
+  };
   render() {
     const { onDeleted, task, completed, onToggleDone, createDate } = this.props;
     const itemClasses = classNames({
@@ -34,10 +41,3 @@ export default class Task extends Component {
     );
   }
 }
-Task.propTypes = {
-  onDeleted: PropTypes.func,
-  task: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  completed: PropTypes.bool,
-  onToggleDone: PropTypes.func,
-  createDate: PropTypes.instanceOf(Date),
-};

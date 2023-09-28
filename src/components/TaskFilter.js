@@ -6,6 +6,10 @@ export default class TasksFilter extends Component {
     onFilterChange: () => {},
     filterValue: {},
   };
+  static propTypes = {
+    onFilterChange: PropTypes.func,
+    filterValue: PropTypes.string,
+  };
   render() {
     const { onFilterChange, filterValue } = this.props;
 
@@ -30,7 +34,3 @@ export default class TasksFilter extends Component {
     );
   }
 }
-TasksFilter.protTypes = {
-  onFilterChange: PropTypes.func,
-  filterValue: PropTypes.string,
-};
