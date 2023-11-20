@@ -25,7 +25,7 @@ export default class TaskList extends Component {
     const { onDeleted, todos, onToggleDone, Play, onEditing, onTaskChange } = this.props;
 
     const elements = todos.map((item) => {
-      const { id, completed, task, createDate, onPlay, timer, editing } = item;
+      const { id, completed, task, createDate, onPlay, timer, editing, pointerEvents } = item;
       return (
         <Task
           onTaskChange={(e) => onTaskChange(e, id)}
@@ -40,6 +40,7 @@ export default class TaskList extends Component {
           createDate={createDate}
           onDeleted={() => onDeleted(id)}
           onToggleDone={() => onToggleDone(id)}
+          pointerEvents={pointerEvents}
         />
       );
     });

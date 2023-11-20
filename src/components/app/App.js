@@ -37,6 +37,8 @@ export default class App extends Component {
       stopwatch: false,
       onPlay: true,
       interval: () => {},
+      startTime: '',
+      pointerEvents: true,
     };
   }
   deleteItem = (id) => {
@@ -77,6 +79,11 @@ export default class App extends Component {
     });
     const idx = this.state.tasks.findIndex((el) => el.id === id);
     const oldTask = this.state.tasks[idx];
+    this.setState(({ tasks }) => {
+      return {
+        tasks: this.toggleProperty(tasks, id, 'pointerEvents'),
+      };
+    });
     if (!oldTask.onPlay) {
       this.setState(({ tasks }) => {
         return {
@@ -134,6 +141,7 @@ export default class App extends Component {
     });
     const idx = this.state.tasks.findIndex((el) => el.id === id);
     const oldTask = this.state.tasks[idx];
+
     if (oldTask.completed) {
       this.setState(({ tasks }) => {
         return {
@@ -158,6 +166,8 @@ export default class App extends Component {
         const idx = tasks.findIndex((el) => el.id === id);
         const oldTask = tasks[idx];
         clearInterval(oldTask.interval);
+        const newTask = { ...oldTask, startTime: '' };
+        return { tasks: [...tasks.slice(0, idx), newTask, ...tasks.slice(idx + 1)] };
       });
       clearInterval(this.interval);
     }
@@ -166,12 +176,17 @@ export default class App extends Component {
     this.setState(({ tasks }) => {
       const idx = tasks.findIndex((el) => el.id === id);
       const oldTask = tasks[idx];
+      let count = 1000;
+      const nowTime = Date.now();
       if (oldTask.timer.s === 0) {
         clearInterval(oldTask.interval);
         const newTask = { ...oldTask, onPlay: true, interval: () => {}, completed: true };
         return { tasks: [...tasks.slice(0, idx), newTask, ...tasks.slice(idx + 1)] };
       }
-      const newTask = { ...oldTask, timer: { s: oldTask.timer.s - 1 } };
+      if (oldTask.startTime) {
+        count = nowTime - oldTask.startTime;
+      }
+      const newTask = { ...oldTask, timer: { s: oldTask.timer.s - Math.round(count / 1000) }, startTime: nowTime };
       return { tasks: [...tasks.slice(0, idx), newTask, ...tasks.slice(idx + 1)] };
     });
   };
@@ -179,7 +194,12 @@ export default class App extends Component {
     this.setState(({ tasks }) => {
       const idx = tasks.findIndex((el) => el.id === id);
       const oldTask = tasks[idx];
-      const newTask = { ...oldTask, timer: { s: oldTask.timer.s + 1 } };
+      let count = 1000;
+      const nowTime = Date.now();
+      if (oldTask.startTime) {
+        count = nowTime - oldTask.startTime;
+      }
+      const newTask = { ...oldTask, timer: { s: oldTask.timer.s + Math.round(count / 1000) }, startTime: nowTime };
       return { tasks: [...tasks.slice(0, idx), newTask, ...tasks.slice(idx + 1)] };
     });
   };

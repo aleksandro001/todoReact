@@ -36,6 +36,7 @@ export default class Task extends Component {
       timer,
       onEditing,
       onTaskChange,
+      pointerEvents,
     } = this.props;
     const itemClasses = classNames({
       completed: completed,
@@ -51,7 +52,7 @@ export default class Task extends Component {
             <span className="title" onClick={onToggleDone}>
               {task}
             </span>
-            <Timer Play={Play} onPlay={onPlay} timer={timer} />
+            <Timer Play={Play} onPlay={onPlay} timer={timer} pointerEvents={pointerEvents} />
             <span className="description">{getFormattedDate}</span>
           </div>
           <button

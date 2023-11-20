@@ -460,3 +460,7 @@ html .clear-completed:active {
 .input-submit {
   display: none;
 }
+.pointer-events {
+  opacity: 0;
+  pointer-events: none;
+}
