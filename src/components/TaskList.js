@@ -23,7 +23,6 @@ export default class TaskList extends Component {
   };
   render() {
     const { onDeleted, todos, onToggleDone, Play, onEditing, onTaskChange } = this.props;
-
     const elements = todos.map((item) => {
       const { id, completed, task, createDate, onPlay, timer, editing, pointerEvents } = item;
       return (
