@@ -69,10 +69,10 @@ export default function App() {
     const idx = tasks.findIndex((el) => el.id === id);
     const oldTask = tasks[idx];
     clearInterval(oldTask.interval);
-    setTasks(toggleProperty(tasks, id, 'completed'));
-    setTasks(toggleProperty(tasks, id, 'pointerEvents'));
+    setTasks((tasks) => toggleProperty(tasks, id, 'completed'));
+    setTasks((tasks) => toggleProperty(tasks, id, 'pointerEvents'));
     if (!oldTask.onPlay) {
-      setTasks(toggleProperty(tasks, id, 'onPlay'));
+      setTasks((tasks) => toggleProperty(tasks, id, 'onPlay'));
     }
   };
 
@@ -81,7 +81,7 @@ export default function App() {
     setTasks(newTasks);
   };
   const onEditing = (id) => {
-    setTasks(toggleProperty(tasks, id, 'editing'));
+    setTasks((tasks) => toggleProperty(tasks, id, 'editing'));
   };
   const onTaskChange = (e, id) => {
     if (e.code === 'Enter') {
@@ -89,40 +89,38 @@ export default function App() {
       const oldTask = tasks[idx];
       const newTask = { ...oldTask, task: e.target.value };
       setTasks([...tasks.slice(0, idx), newTask, ...tasks.slice(idx + 1)]);
-      setTasks(toggleProperty(tasks, id, 'editing'));
+      setTasks((tasks) => toggleProperty(tasks, id, 'editing'));
     } else if (e.code === 'Escape') {
       e.target.value = e.target.defaultValue;
-      setTasks(toggleProperty(tasks, id, 'editing'));
+      setTasks((tasks) => toggleProperty(tasks, id, 'editing'));
     }
   };
   const handleFilterValueChange = (filterValue) => {
     setFilterValue(filterValue);
   };
   const Play = (id) => {
-    setTasks(toggleProperty(tasks, id, 'onPlay'));
+    setTasks((tasks) => toggleProperty(tasks, id, 'onPlay'));
     const idx = tasks.findIndex((el) => el.id === id);
     const oldTask = tasks[idx];
+    // console.log(oldTask.completed);
 
     if (oldTask.completed) {
-      setTasks(toggleProperty(tasks, id, 'completed'));
+      setTasks((tasks) => toggleProperty(tasks, id, 'completed'));
     }
+
     if (oldTask.onPlay) {
-      const idx = tasks.findIndex((el) => el.id === id);
-      const oldTask = tasks[idx];
       if (oldTask.stopwatch) {
         const newTask = { ...oldTask, interval: setInterval(() => secPlay(id), 1000) };
         setTasks([...tasks.slice(0, idx), newTask, ...tasks.slice(idx + 1)]);
       } else {
+        console.log(oldTask.stopwatch);
         const newTask = { ...oldTask, interval: setInterval(() => timerPlay(id), 1000) };
         setTasks([...tasks.slice(0, idx), newTask, ...tasks.slice(idx + 1)]);
       }
     } else {
-      const idx = tasks.findIndex((el) => el.id === id);
-      const oldTask = tasks[idx];
       clearInterval(oldTask.interval);
       const newTask = { ...oldTask, startTime: '' };
       setTasks([...tasks.slice(0, idx), newTask, ...tasks.slice(idx + 1)]);
-      clearInterval(this.interval);
     }
   };
   const timerPlay = (id) => {
@@ -133,7 +131,7 @@ export default function App() {
     if (oldTask.timer.s === 0) {
       clearInterval(oldTask.interval);
       const newTask = { ...oldTask, onPlay: true, interval: () => {}, completed: true };
-      setTasks([...tasks.slice(0, idx), newTask, ...tasks.slice(idx + 1)]);
+      setTasks((tasks) => [...tasks.slice(0, idx), newTask, ...tasks.slice(idx + 1)]);
     }
     if (oldTask.startTime) {
       count = nowTime - oldTask.startTime;
@@ -142,6 +140,7 @@ export default function App() {
     setTasks([...tasks.slice(0, idx), newTask, ...tasks.slice(idx + 1)]);
   };
   const secPlay = (id) => {
+    console.log(tasks);
     const idx = tasks.findIndex((el) => el.id === id);
     const oldTask = tasks[idx];
     let count = 1000;
