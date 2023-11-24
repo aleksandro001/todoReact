@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './app.css';
+import { nanoid } from 'nanoid';
 import NewTaskForm from '../NewTaskForm';
 import TaskList from '../TaskList';
 import Footer from '../Footer';
 
 export default function App() {
-  let maxId = 100;
+  // let maxId = () => nanoid(12);
   const TaskFilterValue = {
     ALL: 'ALL',
     ACTIVE: 'ACTIVE',
@@ -14,7 +15,7 @@ export default function App() {
   const createTask = (task, time = 1800) => {
     return {
       task,
-      id: maxId++,
+      id: nanoid(12),
       completed: false,
       editing: false,
       createDate: new Date(),
@@ -151,7 +152,14 @@ export default function App() {
     const newTask = { ...oldTask, timer: { s: oldTask.timer.s + Math.round(count / 1000) }, startTime: nowTime };
     setTasks([...tasks.slice(0, idx), newTask, ...tasks.slice(idx + 1)]);
   };
-
+  useEffect(() => {
+    return () => {
+      window.addEventListener('unload', (tasks) => {
+        const newTasks = tasks.map((el) => clearInterval(el.interval));
+        setTasks(newTasks);
+      });
+    };
+  }, [tasks]);
   const todoCount = tasks.filter((el) => !el.completed).length;
   return (
     <section className="todoapp">
